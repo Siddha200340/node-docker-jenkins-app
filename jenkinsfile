@@ -28,7 +28,8 @@ pipeline {
                 stage('Lint') {
                     steps {
                         bat "npm install eslint"
-                        bat "npx eslint ."
+                        bat "npx eslint --config .eslintrc.json ."
+
                     }
                 }
                 stage('Test') {
