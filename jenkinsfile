@@ -1,21 +1,30 @@
 pipeline {
     agent any
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'master',description: 'Branch to build')
+        string(name: 'REPO_URL',defaultValue: 'https://github.com/siddha200340/node-docker-jenkins-app.git',description: 'git repo url')
+        string(name: 'CONTAINER_NAME',defaultValue: 'node-docker-app',description: 'docker container name')
+        string(name: 'PORT',defaultValue: '3000',description: 'app port')
+    }
+    environment {
+        IMAGE_NAME = 'node-docker-app-image'
+    }
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/siddha200340/node-docker-jenkins-app.git'
+                git branch: "${params.BRANCH_NAME}", url: "${params.REPO_URL}"
             }
         }
         stage('Build') {
             steps {
                 bat "npm install" 
-                bat "docker build -t node-docker-app-image ."
+                bat "docker build -t %IMAGE_NAME% ."
             }
         }
         stage('Deploy') {
             steps {
-                bat "docker rm -f node-docker-app || exit 0"
-                bat "docker run -d -p 3000:3000 --name node-docker-app node-docker-app-image"
+                bat "docker rm -f ${params.CONTAINER_NAME} || exit 0"
+                bat "docker run -d -p ${params.PORT}:3000 --name ${params.CONTAINER_NAME} node-docker-app-image"
             }
         }
     }
