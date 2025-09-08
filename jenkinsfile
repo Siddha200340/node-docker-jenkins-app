@@ -28,7 +28,6 @@ pipeline {
                 stage('Lint Dockerfile') {
                     steps {
                         bat "type Dockerfile | docker run --rm -i hadolint/hadolint"
-                        bat "hadolint Dockerfile"
                     }
                 }
                 stage('Test') {
