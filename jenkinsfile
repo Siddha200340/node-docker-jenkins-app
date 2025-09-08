@@ -8,18 +8,18 @@ pipeline {
         }
         stage('Build') {
             steps {
-                bat '''
-                npm install
+                bat """
+                npm install 
                 docker build -t node-docker-app-image .
-                '''
+                """
             }
         }
         stage('Deploy') {
             steps {
-                bat '''
+                bat """
                 docker rm -f node-docker-app || exit 0
                 docker run -d -p 3000:3000 --name node-docker-app node-docker-app-image
-                '''
+                """
             }
         }
     }
