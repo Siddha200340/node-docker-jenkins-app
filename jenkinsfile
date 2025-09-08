@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                Branch: "master",
+                url: "https://github.com/siddha200340/node-docker-jenkins-app.git"
+            }
+        }
+        stage('Build') {
+            steps {
+                bat '''
+                npm install
+                docker build -t node-docker-app-image .
+                '''
+            }
+        }
+        stage('Deploy') {
+            steps {
+                bat'''
+                docker rm -f node-docker-app || exit 0
+                docker run -d -p 3000:3000 --name node-docker-app node-docker-app-image'''
+            }
+        }
+    }
+}
