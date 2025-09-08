@@ -1,13 +1,15 @@
 {
-  "name": "my-real-1-app",
+  "name": "node-docker-jenkins-app",
   "version": "1.0.0",
-  "description": "Simple Node.js app for Docker + Jenkins demo",
-  "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "jest"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
   }
 }
-

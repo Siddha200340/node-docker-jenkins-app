@@ -15,6 +15,12 @@ pipeline {
                 git branch: "${params.BRANCH_NAME}", url: "${params.REPO_URL}"
             }
         }
+        stage('Test') {
+            steps {
+                bat "npm install"
+                bat "npm test"
+            }
+        }
         stage('Build') {
             steps {
                 bat "npm install" 
