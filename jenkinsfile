@@ -27,7 +27,7 @@ pipeline {
             parallel {
                 stage('Lint Dockerfile') {
                     steps {
-                        bat "docker run --rm -i hadolint/hadolint < Dockerfile"
+                        bat "type Dockerfile | docker run --rm -i hadolint/hadolint"
                         bat "hadolint Dockerfile"
                     }
                 }
