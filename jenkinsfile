@@ -17,6 +17,7 @@ pipeline {
         }
         stage('Test') {
             steps {
+                bat "docker rm -f ${params.CONTAINER_NAME} || exit 0"
                 bat "npm install"
                 bat "npm test"
             }
