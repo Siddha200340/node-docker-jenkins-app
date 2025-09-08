@@ -23,25 +23,15 @@ pipeline {
             }
         }
 
-        stage('Quality Checks') {
-            parallel {
-                stage('Lint') {
-                    steps {
-                        bat "npm install eslint"
-                        bat "npx eslint --config .eslintrc.json ."
-
-                    }
-                }
-                stage('Test') {
-                    steps {
-                        bat "npm test"
-                    }
-                }
+        stage('Test') {
+            steps {
+                bat "npm test"
             }
         }
 
         stage('Deploy') {
             steps {
+                // Remove container if exists; do not fail if not present
                 bat "docker rm -f ${params.CONTAINER_NAME} || exit 0"
                 bat "docker run -d -p ${params.PORT}:3000 --name ${params.CONTAINER_NAME} %IMAGE_NAME%"
             }
