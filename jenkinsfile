@@ -3,8 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                Branch: "master",
-                url: "https://github.com/siddha200340/node-docker-jenkins-app.git"
+                git branch: 'master', url: 'https://github.com/siddha200340/node-docker-jenkins-app.git'
             }
         }
         stage('Build') {
@@ -17,9 +16,10 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                bat'''
+                bat '''
                 docker rm -f node-docker-app || exit 0
-                docker run -d -p 3000:3000 --name node-docker-app node-docker-app-image'''
+                docker run -d -p 3000:3000 --name node-docker-app node-docker-app-image
+                '''
             }
         }
     }
