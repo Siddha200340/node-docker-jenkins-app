@@ -1,37 +1,35 @@
-// app.js
-require("dotenv").config(); // loads environment variables from .env if running locally
+require("dotenv").config(); // Load environment variables
 
 const express = require("express");
 const mongoose = require("mongoose");
 
 const app = express();
-
-// Middleware
 app.use(express.json());
 
 // MongoDB connection
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost:27017/mydb";
+const mongoUrl = process.env.MONGO_URL;
+if (!mongoUrl) {
+  console.error("❌ MONGO_URL is not defined!");
+  process.exit(1);
+}
 
 mongoose
   .connect(mongoUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() =>
-    console.log(`✅ Connected to MongoDB at ${mongoUrl}`)
-  )
-  .catch((err) =>
-    console.error("❌ MongoDB connection error:", err)
-  );
+  .then(() => console.log(`✅ Connected to MongoDB at ${mongoUrl}`))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Simple model for testing
-const Item = mongoose.model("Item", new mongoose.Schema({
-  name: String,
-}));
+// Simple model
+const Item = mongoose.model("Item", new mongoose.Schema({ name: String }));
 
 // Routes
-app.get("/", (req, res) => {
-  res.send("🚀 Node.js + MongoDB App running!");
+app.get("/", (req, res) => res.send("🚀 Node.js + MongoDB App running!"));
+
+app.get("/health", (req, res) => {
+  const state = mongoose.connection.readyState;
+  res.status(state === 1 ? 200 : 500).json({ status: state === 1 ? "ok" : "error" });
 });
 
 app.post("/items", async (req, res) => {
