@@ -1,15 +1,23 @@
-// app.js
-const express = require('express');
+const express = require("express");
+const mongoose = require("mongoose");
+
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("Connected to MongoDB"))
+.catch(err => console.error("MongoDB connection error:", err));
+
+// Middleware & routes
+app.get("/", (req, res) => {
+  res.send("Hello from Node + MongoDB!");
 });
 
-// Only start the server if not required by another module
-if (require.main === module) {
-  app.listen(3000, () => console.log('Server running on port 3000'));
-}
-
-module.exports = app;
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
