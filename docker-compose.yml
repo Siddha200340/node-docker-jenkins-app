@@ -1,8 +1,25 @@
-version: "3.8"
+version: "3.9"
+
 services:
-  web:
+  app:
     build: .
     ports:
-      - "3000:3000"
-    container_name: node-docker-app
+      - "${APP_PORT}:3000"       # uses variable instead of hardcoding
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/mydb   # app gets DB URL from here
+      - NODE_ENV=${NODE_ENV}                   # app knows if it's dev/prod
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}   # DB username from .env
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}   # DB password from .env
+    volumes:
+      - mongo-data:/data/db                        # data persists even if container restarts
+
+volumes:
+  mongo-data:
 
