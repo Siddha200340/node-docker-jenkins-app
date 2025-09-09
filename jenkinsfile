@@ -1,11 +1,5 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Branch to build')
-        string(name: 'REPO_URL', defaultValue: 'https://github.com/siddha200340/node-docker-jenkins-app.git', description: 'git repo url')
-        string(name: 'CONTAINER_NAME', defaultValue: 'node-docker-app', description: 'docker container name')
-        string(name: 'PORT', defaultValue: '3000', description: 'app port')
-    }
     environment {
         IMAGE_NAME = 'node-docker-app-image'
     }
